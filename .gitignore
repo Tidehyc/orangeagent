@@ -1,0 +1,22 @@
+# Rust build artifacts
+/target/
+**/*.rs.bk
+*.pdb
+
+# Local secrets & environment files
+.env
+.env.*
+!.env.example
+
+# Local runtime state & caches
+.orangeagent/
+*.sqlite
+*.sqlite-shm
+*.sqlite-wal
+
+# IDE & OS junk
+.DS_Store
+.idea/
+.vscode/
+*.swp
+*.swo
