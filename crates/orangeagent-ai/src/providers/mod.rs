@@ -1,8 +1,12 @@
+pub mod openai_chat;
+
 use std::pin::Pin;
 
 use async_trait::async_trait;
 use futures::Stream;
 use tokio_util::sync::CancellationToken;
+
+pub use openai_chat::{OpenAiChatConfig, OpenAiChatProvider};
 
 use crate::{AiError, ProviderFamily, ProviderRequest, StreamEvent};
 

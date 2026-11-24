@@ -7,7 +7,9 @@ pub mod types;
 pub mod vcr;
 
 pub use error::{AiError, ErrorCategory, ErrorVerdict};
-pub use providers::{EventStream, LlmProvider, stream_from_events};
+pub use providers::{
+    EventStream, LlmProvider, OpenAiChatConfig, OpenAiChatProvider, stream_from_events,
+};
 pub use types::{
     ContentBlock, FinishReason, Message, ProviderFamily, ProviderRequest, Role, StreamEvent,
     TokenUsage, ToolDefinition, sanitize_for_provider,
