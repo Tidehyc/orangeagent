@@ -3,6 +3,7 @@ resolver = "3"
 members = [
     "crates/orangeagent-ai",
     "crates/orangeagent-core",
+    "crates/orangeagent-harness",
 ]
 
 [workspace.package]
@@ -14,9 +15,14 @@ repository = "https://github.com/tide/orangeagent"
 [workspace.dependencies]
 async-trait = "0.1"
 futures = "0.3"
+globset = "0.4"
+grep-regex = "0.1"
+grep-searcher = "0.1"
+ignore = "0.4"
 reqwest = { version = "0.12", default-features = false, features = ["rustls-tls", "json", "stream"] }
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
+tempfile = "3"
 thiserror = "2"
 tokio = { version = "1", features = ["rt-multi-thread", "macros", "sync", "time", "fs", "io-util"] }
 tokio-util = "0.7"
