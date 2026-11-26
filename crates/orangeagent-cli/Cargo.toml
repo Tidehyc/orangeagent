@@ -1,0 +1,27 @@
+[package]
+name = "orangeagent-cli"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[[bin]]
+name = "orangeagent"
+path = "src/main.rs"
+
+[dependencies]
+clap.workspace = true
+orangeagent-ai = { path = "../orangeagent-ai" }
+orangeagent-core = { path = "../orangeagent-core" }
+orangeagent-harness = { path = "../orangeagent-harness" }
+orangeagent-spine = { path = "../orangeagent-spine" }
+serde.workspace = true
+serde_json.workspace = true
+tokio.workspace = true
+tokio-util.workspace = true
+
+[dev-dependencies]
+tempfile.workspace = true
+
+[lints]
+workspace = true
