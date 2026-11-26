@@ -14,11 +14,13 @@ ignore.workspace = true
 orangeagent-core = { path = "../orangeagent-core" }
 serde.workspace = true
 serde_json.workspace = true
+similar.workspace = true
+tempfile.workspace = true
 tokio.workspace = true
 tokio-util.workspace = true
 
-[dev-dependencies]
-tempfile.workspace = true
+[target.'cfg(unix)'.dependencies]
+nix.workspace = true
 
 [lints]
 workspace = true

@@ -1,4 +1,5 @@
 use std::collections::HashMap;
+use std::io::Write as _;
 use std::path::{Component, Path, PathBuf};
 use std::sync::{Arc, Mutex};
 
@@ -164,6 +165,62 @@ pub(crate) fn fnv1a_64(bytes: &[u8]) -> u64 {
         hash = hash.wrapping_mul(0x0000_0100_0000_01b3);
     }
     hash
+}
+
+/// Atomically write `content` to `target` via a same-directory temporary file and `rename(2)`.
+///
+/// Creates missing parent directories automatically, flushes data to disk (`sync_all`),
+/// preserves existing file permissions on overwrite (or uses `0o644` for new files on Unix),
+/// and cleans up the temporary file automatically if any step fails.
+pub(crate) fn atomic_write_file(target: &Path, content: &[u8]) -> Result<(), String> {
+    let parent = target
+        .parent()
+        .ok_or_else(|| format!("target path `{}` has no parent directory", target.display()))?;
+
+    std::fs::create_dir_all(parent).map_err(|err| {
+        format!(
+            "failed to create parent directories for `{}`: {err}",
+            target.display()
+        )
+    })?;
+
+    let existing_perms = std::fs::metadata(target).ok().map(|m| m.permissions());
+
+    let mut temp = tempfile::NamedTempFile::new_in(parent).map_err(|err| {
+        format!(
+            "failed to create temp file in `{}`: {err}",
+            parent.display()
+        )
+    })?;
+
+    temp.write_all(content).map_err(|err| {
+        format!(
+            "failed to write temp file for `{}`: {err}",
+            target.display()
+        )
+    })?;
+    temp.as_file().sync_all().map_err(|err| {
+        format!(
+            "failed to flush temp file for `{}`: {err}",
+            target.display()
+        )
+    })?;
+
+    if let Some(perms) = existing_perms {
+        let _ = temp.as_file().set_permissions(perms);
+    } else {
+        #[cfg(unix)]
+        {
+            use std::os::unix::fs::PermissionsExt as _;
+            let _ = temp
+                .as_file()
+                .set_permissions(std::fs::Permissions::from_mode(0o644));
+        }
+    }
+
+    temp.persist(target)
+        .map_err(|err| format!("failed to persist `{}`: {}", target.display(), err.error))?;
+    Ok(())
 }
 
 #[cfg(test)]
