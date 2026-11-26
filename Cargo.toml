@@ -4,6 +4,7 @@ members = [
     "crates/orangeagent-ai",
     "crates/orangeagent-core",
     "crates/orangeagent-harness",
+    "crates/orangeagent-spine",
 ]
 
 [workspace.package]
