@@ -2,6 +2,7 @@
 resolver = "3"
 members = [
     "crates/orangeagent-ai",
+    "crates/orangeagent-context",
     "crates/orangeagent-core",
     "crates/orangeagent-harness",
     "crates/orangeagent-spine",

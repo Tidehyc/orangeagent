@@ -885,6 +885,21 @@ dependencies = [
 ]
 
 [[package]]
+name = "orangeagent-context"
+version = "0.1.0"
+dependencies = [
+ "async-trait",
+ "futures",
+ "orangeagent-ai",
+ "serde",
+ "serde_json",
+ "tempfile",
+ "thiserror",
+ "tokio",
+ "tokio-util",
+]
+
+[[package]]
 name = "orangeagent-core"
 version = "0.1.0"
 dependencies = [
