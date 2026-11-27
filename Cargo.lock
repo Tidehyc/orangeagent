@@ -874,11 +874,15 @@ dependencies = [
 name = "orangeagent-spine"
 version = "0.1.0"
 dependencies = [
+ "async-trait",
  "orangeagent-ai",
+ "orangeagent-core",
  "serde",
  "serde_json",
  "tempfile",
  "thiserror",
+ "tokio",
+ "tokio-util",
 ]
 
 [[package]]

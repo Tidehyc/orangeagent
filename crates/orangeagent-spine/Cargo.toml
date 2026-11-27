@@ -6,10 +6,14 @@ license.workspace = true
 repository.workspace = true
 
 [dependencies]
+async-trait.workspace = true
 orangeagent-ai = { path = "../orangeagent-ai" }
+orangeagent-core = { path = "../orangeagent-core" }
 serde.workspace = true
 serde_json.workspace = true
 thiserror.workspace = true
+tokio.workspace = true
+tokio-util.workspace = true
 
 [dev-dependencies]
 tempfile.workspace = true
