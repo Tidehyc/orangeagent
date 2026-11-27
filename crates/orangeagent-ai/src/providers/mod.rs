@@ -1,11 +1,14 @@
+pub mod anthropic;
 pub mod openai_chat;
 
 use std::pin::Pin;
 
 use async_trait::async_trait;
 use futures::Stream;
+use reqwest::header::{HeaderMap, RETRY_AFTER};
 use tokio_util::sync::CancellationToken;
 
+pub use anthropic::{AnthropicConfig, AnthropicProvider};
 pub use openai_chat::{OpenAiChatConfig, OpenAiChatProvider};
 
 use crate::{AiError, ProviderFamily, ProviderRequest, StreamEvent};
@@ -53,4 +56,11 @@ pub fn stream_from_events(
             Some((next, (iter, cancel, false)))
         },
     ))
+}
+
+/// Parse an integer `Retry-After` HTTP header (in seconds) into milliseconds.
+pub(crate) fn parse_retry_after_ms(headers: &HeaderMap) -> Option<u64> {
+    let raw = headers.get(RETRY_AFTER)?.to_str().ok()?.trim();
+    let secs: u64 = raw.parse().ok()?;
+    Some(secs.saturating_mul(1_000))
 }

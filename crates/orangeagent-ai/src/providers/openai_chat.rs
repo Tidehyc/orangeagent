@@ -2,7 +2,7 @@ use std::collections::VecDeque;
 
 use async_trait::async_trait;
 use futures::StreamExt;
-use reqwest::header::{AUTHORIZATION, CONTENT_TYPE, HeaderMap, HeaderValue, RETRY_AFTER};
+use reqwest::header::{AUTHORIZATION, CONTENT_TYPE, HeaderMap, HeaderValue};
 use serde::Deserialize;
 use serde_json::{Value, json};
 use tokio_util::sync::CancellationToken;
@@ -86,7 +86,7 @@ impl LlmProvider for OpenAiChatProvider {
 
         let status = response.status();
         if !status.is_success() {
-            let retry_after_ms = parse_retry_after_ms(response.headers());
+            let retry_after_ms = super::parse_retry_after_ms(response.headers());
             let err_body = response.text().await.unwrap_or_default();
             return Err(classify_http_error(
                 status.as_u16(),
@@ -225,12 +225,6 @@ fn push_wire_messages(out: &mut Vec<Value>, msg: &Message) {
             }
         }
     }
-}
-
-fn parse_retry_after_ms(headers: &HeaderMap) -> Option<u64> {
-    let raw = headers.get(RETRY_AFTER)?.to_str().ok()?.trim();
-    let secs: u64 = raw.parse().ok()?;
-    Some(secs.saturating_mul(1_000))
 }
 
 /// Map non-2xx HTTP status + response body into a structured [`AiError`].
